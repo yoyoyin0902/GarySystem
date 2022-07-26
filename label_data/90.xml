@@ -1,0 +1,26 @@
+<annotation>
+	<folder>left</folder>
+	<filename>90.jpg</filename>
+	<path>/home/user/hand_YOLO/data/left/90.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>1920</width>
+		<height>1080</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>volleyball</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>701</xmin>
+			<ymin>367</ymin>
+			<xmax>1006</xmax>
+			<ymax>655</ymax>
+		</bndbox>
+	</object>
+</annotation>

@@ -1065,7 +1065,7 @@ if __name__ == '__main__':
         # print(np.min(depth_image), np.max(depth_image))
 
         
-        cv2.imshow("depth",depth_image)
+        # cv2.imshow("depth",depth_image)
 
     
         # #shape detection
