@@ -11,6 +11,8 @@ import torch
 import darknet
 import logging
 import shutil
+import socket
+import struct
 import datetime
 import argparse
 import torchvision
@@ -36,6 +38,9 @@ from typing import Callable, Optional, List, Tuple
 from torch import nn
 from torchvision.models.resnet import ResNet, Bottleneck
 from torch import Tensor
+
+UDP_IP = "192.168.1.6"
+UDP_PORT = 8787
 
 # Get the top-level logger object
 log = logging.getLogger(__name__)
@@ -986,6 +991,11 @@ zed_id = 0
 
 
 if __name__ == '__main__':
+    #UDP
+    point = np.zeros((1,2),np.float32)
+    print("point:")
+    print(point)
+
     #定義zed
     zed = sl.Camera()
     zed_pose = sl.Pose()
@@ -1041,12 +1051,6 @@ if __name__ == '__main__':
     point_cloud = sl.Mat(image_size.width,image_size.height)
     # point_cloud1 = sl.Mat(500,500,sl.MAT_TYPE.F32_C4, sl.MEM.CPU)
 
-    i = -10
-    a = 0
-    b = 0
-    c = 0
-    d = 0
-
     #yolo modle
     network, class_names, class_colors = darknet.load_network(config,data,weights,batch_size=1)
 
@@ -1056,17 +1060,9 @@ if __name__ == '__main__':
         zed.grab() #開啟管道
         zed.retrieve_image(image_zed_left, sl.VIEW.LEFT, sl.MEM.CPU, image_size)
         zed.retrieve_measure(depth_image_zed, sl.MEASURE.DEPTH, sl.MEM.CPU, image_size)
-        zed.retrieve_measure(point_cloud, sl.MEASURE.XYZRGBA,sl.MEM.CPU, image_size)
-
         
         color_image = image_zed_left.get_data()
-
         depth_image = depth_image_zed.get_data()
-        # print(np.min(depth_image), np.max(depth_image))
-
-        
-        # cv2.imshow("depth",depth_image)
-
     
         # #shape detection
         width_left = color_image.shape[1]
@@ -1086,11 +1082,101 @@ if __name__ == '__main__':
         image_left = darknet.draw_boxes(detections_left, frame_resized_left, class_colors)
         image_left = cv2.cvtColor(image_left, cv2.COLOR_BGR2RGB)
 
-
         cv2.imshow("image_left", image_left)
+        cv2.imshow("depth_image",depth_image)
         
+        if  len(detections_left) != 0:
+            if int(float(detections_left[0][1])) >= 85 :
+                if detections_left[0][0] == "bottle_1" :
+                    point[0] = [0,1]
+                    for j in range(1):
+                        message = b""
+                        for i in range(2):
+                            message += struct.pack('f', point[j][i])
+                    print(message)
+                    print("UDP target IP: %s" % UDP_IP)
+                    print("UDP target port: %s" % UDP_PORT)
+                    print("message: %s" % message)
 
-                        
+                    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)  # UDP
+                    sock.sendto(message, (UDP_IP, UDP_PORT))
+                    time.sleep(1.5)
+                elif detections_left[0][0] == "bottle_2" :
+                    point[0] = [0,2]
+                    for j in range(1):
+                        message = b""
+                        for i in range(2):
+                            message += struct.pack('f', point[j][i])
+                    print(message)
+                    print("UDP target IP: %s" % UDP_IP)
+                    print("UDP target port: %s" % UDP_PORT)
+                    print("message: %s" % message)
+
+                    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)  # UDP
+                    sock.sendto(message, (UDP_IP, UDP_PORT))
+                    time.sleep(1.5)
+
+                elif detections_left[0][0] == "basketball" :
+                    point[0] = [0,3]
+                    for j in range(1):
+                        message = b""
+                        for i in range(2):
+                            message += struct.pack('f', point[j][i])
+                    print(message)
+                    print("UDP target IP: %s" % UDP_IP)
+                    print("UDP target port: %s" % UDP_PORT)
+                    print("message: %s" % message)
+
+                    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)  # UDP
+                    sock.sendto(message, (UDP_IP, UDP_PORT))
+                    time.sleep(1.5)
+
+                elif detections_left[0][0] == "volleyball" :
+                    point[0] = [0,4]
+                    for j in range(1):
+                        message = b""
+                        for i in range(2):
+                            message += struct.pack('f', point[j][i])
+                    print(message)
+                    print("UDP target IP: %s" % UDP_IP)
+                    print("UDP target port: %s" % UDP_PORT)
+                    print("message: %s" % message)
+
+                    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)  # UDP
+                    sock.sendto(message, (UDP_IP, UDP_PORT))
+                    time.sleep(1.5)
+
+                elif detections_left[0][0] == "egg" :
+                    point[0] = [0,5]
+                    for j in range(1):
+                        message = b""
+                        for i in range(2):
+                            message += struct.pack('f', point[j][i])
+                    print(message)
+                    print("UDP target IP: %s" % UDP_IP)
+                    print("UDP target port: %s" % UDP_PORT)
+                    print("message: %s" % message)
+
+                    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)  # UDP
+                    sock.sendto(message, (UDP_IP, UDP_PORT))
+                    time.sleep(1.5)
+                else:
+                    point[0] = [0,0]
+                    for j in range(1):
+                        message = b""
+                        for i in range(2):
+                            message += struct.pack('f', point[j][i])
+                    print(message)
+                    print("UDP target IP: %s" % UDP_IP)
+                    print("UDP target port: %s" % UDP_PORT)
+                    print("message: %s" % message)
+
+                    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)  # UDP
+                    sock.sendto(message, (UDP_IP, UDP_PORT))
+                    time.sleep(1.5)
+
+                    
+
         key = cv2.waitKey(5)
         if key == 27:
             break            
