@@ -1054,6 +1054,8 @@ if __name__ == '__main__':
     #yolo modle
     network, class_names, class_colors = darknet.load_network(config,data,weights,batch_size=1)
 
+    flag = 0
+    object_thing = ""
     key = ''
     while key != 113 : 
         # while viewer.is_available():
@@ -1084,98 +1086,80 @@ if __name__ == '__main__':
 
         cv2.imshow("image_left", image_left)
         cv2.imshow("depth_image",depth_image)
+
+        if len(detections_left) == 0:
+            flag =0
+        if len(detections_left) != 0 and object_thing != detections_left[0][0]:
+            flag =0
+
+        flag += 1
+        print(flag)
         
         if  len(detections_left) != 0:
-            if int(float(detections_left[0][1])) >= 85 :
-                if detections_left[0][0] == "bottle_1" :
+            if int(float(detections_left[0][1])) >= 95 :
+                if detections_left[0][0] == "bottle_1" and flag == 30 :
                     point[0] = [0,1]
                     for j in range(1):
                         message = b""
                         for i in range(2):
                             message += struct.pack('f', point[j][i])
-                    print(message)
-                    print("UDP target IP: %s" % UDP_IP)
-                    print("UDP target port: %s" % UDP_PORT)
                     print("message: %s" % message)
-
                     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)  # UDP
                     sock.sendto(message, (UDP_IP, UDP_PORT))
-                    time.sleep(1.5)
-                elif detections_left[0][0] == "bottle_2" :
+
+                elif detections_left[0][0] == "bottle_2" and flag == 30 :
                     point[0] = [0,2]
                     for j in range(1):
                         message = b""
                         for i in range(2):
                             message += struct.pack('f', point[j][i])
-                    print(message)
-                    print("UDP target IP: %s" % UDP_IP)
-                    print("UDP target port: %s" % UDP_PORT)
                     print("message: %s" % message)
-
                     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)  # UDP
                     sock.sendto(message, (UDP_IP, UDP_PORT))
-                    time.sleep(1.5)
 
-                elif detections_left[0][0] == "basketball" :
+                elif detections_left[0][0] == "basketball" and flag == 30:
                     point[0] = [0,3]
                     for j in range(1):
                         message = b""
                         for i in range(2):
                             message += struct.pack('f', point[j][i])
-                    print(message)
-                    print("UDP target IP: %s" % UDP_IP)
-                    print("UDP target port: %s" % UDP_PORT)
                     print("message: %s" % message)
-
                     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)  # UDP
                     sock.sendto(message, (UDP_IP, UDP_PORT))
-                    time.sleep(1.5)
-
-                elif detections_left[0][0] == "volleyball" :
+     
+                elif detections_left[0][0] == "volleyball" and flag == 30:
                     point[0] = [0,4]
                     for j in range(1):
                         message = b""
                         for i in range(2):
                             message += struct.pack('f', point[j][i])
-                    print(message)
-                    print("UDP target IP: %s" % UDP_IP)
-                    print("UDP target port: %s" % UDP_PORT)
                     print("message: %s" % message)
-
                     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)  # UDP
                     sock.sendto(message, (UDP_IP, UDP_PORT))
-                    time.sleep(1.5)
 
-                elif detections_left[0][0] == "egg" :
+                elif detections_left[0][0] == "egg" and flag == 30:
                     point[0] = [0,5]
                     for j in range(1):
                         message = b""
                         for i in range(2):
                             message += struct.pack('f', point[j][i])
-                    print(message)
-                    print("UDP target IP: %s" % UDP_IP)
-                    print("UDP target port: %s" % UDP_PORT)
-                    print("message: %s" % message)
-
+                    print("message: %s" % message)                    
                     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)  # UDP
                     sock.sendto(message, (UDP_IP, UDP_PORT))
-                    time.sleep(1.5)
+                  
                 else:
                     point[0] = [0,0]
                     for j in range(1):
                         message = b""
                         for i in range(2):
                             message += struct.pack('f', point[j][i])
-                    print(message)
-                    print("UDP target IP: %s" % UDP_IP)
-                    print("UDP target port: %s" % UDP_PORT)
                     print("message: %s" % message)
-
                     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)  # UDP
                     sock.sendto(message, (UDP_IP, UDP_PORT))
-                    time.sleep(1.5)
-
-                    
+                
+        if len(detections_left) != 0:
+            object_thing = detections_left[0][0]
+                   
 
         key = cv2.waitKey(5)
         if key == 27:
